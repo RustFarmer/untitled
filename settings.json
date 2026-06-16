@@ -1,0 +1,115 @@
+{
+    "Color": {
+        "Black": [
+            0,
+            0,
+            0
+        ],
+        "White": [
+            255,
+            255,
+            255
+        ],
+        "Brown": [
+            80,
+            40,
+            50
+        ]
+    },
+    "ColorInventory": {
+        "Gray": [
+            79,
+            79,
+            79
+        ]
+    },
+    "SettingsInventory": {
+        "size_mesh ": [
+            150,
+            150
+        ]
+    },
+    "ParameterScreen": {
+        "width": 1080,
+        "height": 900
+    },
+    "Player": {
+        "name": "default",
+        "skin_ust": "blue",
+        "health": 100,
+        "ColorHealthPoint": [
+            255,
+            0,
+            0
+        ],
+        "PositionHealthPoint": [
+            950,
+            30
+        ],
+        "Width_Height_HealthPoint": [
+            100,
+            10
+        ],
+        "level": 1,
+        "score": 0,
+        "position": [
+            520.5,
+            469.0
+        ],
+        "width_player": 60,
+        "height_player": 60,
+        "speed": 0.5,
+        "scale_move": 10,
+        "inventory": [
+            "m416",
+            "ak",
+            "m416",
+            "m416"
+        ]
+    },
+    "Skin": {
+        "default": [
+            127,
+            255,
+            212
+        ],
+        "blue": [
+            0,
+            128,
+            255
+        ]
+    },
+    "SettingLayerGame": {
+        "first": {
+            "x": 0,
+            "y": 800
+        },
+        "second": []
+    },
+    "Path_In_Object_Model": {
+        "ak": "../object_model/ak_model.png",
+        "m416": "../object_model/m416_model.png"
+    },
+    "SpecificationsLoot": {
+        "ak": {
+            "sizeInMao": [
+                100,
+                80
+            ],
+            "sizeInInventory": [
+                150,
+                140
+            ]
+        },
+        "m416": {
+            "sizeInMao": [
+                100,
+                80
+            ],
+            "sizeInInventory": [
+                150,
+                140
+            ]
+        }
+    }
+}
