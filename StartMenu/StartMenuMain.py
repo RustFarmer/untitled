@@ -39,7 +39,6 @@ class StartMenu:
         self.DONE: bool = False
 
     def draw_button(self, surface, rect, text_rect, text, is_hovered):
-        """Рисует одну кнопку с рамкой и текстом."""
         if is_hovered:
             surface.fill((127, 255, 212))
         else:
@@ -50,23 +49,22 @@ class StartMenu:
 
     def run_start_menu(self):
         while not self.DONE:
+
+            Pl = Player(self.screen)
             mouse_pos = pygame.mouse.get_pos()
 
             for self.event in pygame.event.get():
                 if self.event.type == pygame.QUIT:
-                    player = Player(self.screen)
                     self.DONE = True
 
                 if self.event.type == pygame.KEYDOWN:
-                    if self.event.type == pygame.K_z:
-
+                    if self.event.key == pygame.K_z:
                         self.DONE = True
 
                 if self.event.type == pygame.MOUSEBUTTONDOWN and self.event.button == 1:
                     if self.play_rect.collidepoint(self.event.pos):
                         gm = GameScreen()
                         gm.game_run()
-
                     elif self.settings_rect.collidepoint(self.event.pos):
                         settingsmenu = ScreenSetting(self._width, self._height)
                         settingsmenu.run_settings_menu()
@@ -79,6 +77,8 @@ class StartMenu:
 
             self.draw_button(self.settings_surface, self.settings_rect, self.settings_text_rect,
                              self.text_settings, self.settings_rect.collidepoint(mouse_pos))
+
+            Pl.rect_player_in_start_menu(900, 700)
 
             pygame.display.flip()
 

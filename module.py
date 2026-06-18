@@ -1,7 +1,15 @@
 import json
 
+data = "../settings.json"
 
-def find_in_json(data, GetKey, target_find) -> list or None:
+
+def find_in_json(data_path, GetKey, target_find) -> list or None:
+    try:
+        with open(data_path, 'r', encoding='utf-8') as file:
+            data: dict = json.load(file)
+    except FileNotFoundError:
+        print("FILE NOT FOUND SETTINGS.JSON")
+
     colors_dict = data.get(str(GetKey))
     if colors_dict and target_find in colors_dict:
         return colors_dict[target_find]
@@ -13,6 +21,7 @@ def update_json_value(file_path, key_path, new_value, create_missing=False):
 
     with open(file_path, 'r', encoding='utf-8') as f:
         data = json.load(f)
+        print(data["Player"]['position'], '-MODULE-0', new_value)
 
     if isinstance(key_path, str):
         keys = key_path.split('.')
@@ -29,17 +38,17 @@ def update_json_value(file_path, key_path, new_value, create_missing=False):
         current = current[key]
 
     last_key = keys[-1]
+    print(current[last_key], '|', new_value)
+
     if not create_missing and last_key not in current:
         raise KeyError(f"Ключ '{last_key}' не найден в {keys}")
 
     current[last_key] = new_value
+    print(current[last_key], '|2|', new_value)
 
     with open(file_path, 'w', encoding='utf-8') as f:
+        print(data["Player"]['position'], "|3|")
         json.dump(data, f, indent=4, ensure_ascii=False)
-
-
-with open("../settings.json", 'r', encoding='utf-8') as file:
-    data = json.load(file)
 
 
 class GetKey:
@@ -49,34 +58,32 @@ class GetKey:
     GetKeyObject: str = "Path_In_Object_Model"
     GetKeyInventory: str = "SettingsInventory"
     SettingsLoot: str = "SpecificationsLoot"
+    SettingsWeapon: str = "SettingsWeapon"
 
 
 class SettingsScreenPer:
     Black: list
     White: list
     Brown: list
-
     width: int
     height: int
-    data: dict
-
     FirstSetting_x: int
     FirstSetting_y: int
-    try:
-        with open("../settings.json", 'r', encoding='utf-8') as file:
-            data: dict = json.load(file)
-    except FileNotFoundError:
-        print("FILE NOT FOUND SETTINGS.JSON")
 
-    Black: list = find_in_json(data, GetKey.GetKeySettingsScreenColor, "Black")
-    White: list = find_in_json(data, GetKey.GetKeySettingsScreenColor, "White")
-    Brown: list = find_in_json(data, GetKey.GetKeySettingsScreenColor, "Brown")
+    Black = find_in_json(data, GetKey.GetKeySettingsScreenColor, "Black")
+    White = find_in_json(data, GetKey.GetKeySettingsScreenColor, "White")
+    Brown = find_in_json(data, GetKey.GetKeySettingsScreenColor, "Brown")
 
-    width: int = find_in_json(data, GetKey.GetKeyObjectScreenParameter, "width")
-    height: int = find_in_json(data, GetKey.GetKeyObjectScreenParameter, "height")
+    width = find_in_json(data, GetKey.GetKeyObjectScreenParameter, "width")
+    height = find_in_json(data, GetKey.GetKeyObjectScreenParameter, "height")
 
-    FirstSetting: int = find_in_json(data, "SettingLayerGame", "first")
-    FirstSetting_x, FirstSetting_y = FirstSetting["x"], FirstSetting["y"]
+    FirstSetting_dict = find_in_json(data, "SettingLayerGame", "first")
+    if FirstSetting_dict:
+        FirstSetting_x = FirstSetting_dict.get("x", 0)
+        FirstSetting_y = FirstSetting_dict.get("y", 0)
+    else:
+        FirstSetting_x = 0
+        FirstSetting_y = 0
 
 
 class SettingsPlayer:
@@ -102,9 +109,6 @@ class SettingsPlayer:
 
     Inventory: list
 
-    with open("../settings.json", 'r', encoding='utf-8') as file:
-        data = json.load(file)
-
     Name = find_in_json(data, GetKey.GeKeyObjectPlayer, "name")
 
     Skin = find_in_json(data, GetKey.GeKeyObjectPlayer, "skin")
@@ -125,20 +129,14 @@ class SettingsPlayer:
 
     Position = find_in_json(data, GetKey.GeKeyObjectPlayer, "position")
 
+    PositionX, PositionY = Position[0], Position[1]
+
     Speed = find_in_json(data, GetKey.GeKeyObjectPlayer, "speed")
     Scale_move = find_in_json(data, GetKey.GeKeyObjectPlayer, "scale_move")
-
-    if Position:
-        PositionX, PositionY = Position[0], Position[1]
-    else:
-        PositionX, PositionY = 0, 0
 
 
 class ControlsPlayer:
     ControlsPlayer: dict
-
-    with open("../settings.json", 'r', encoding='utf-8') as file:
-        data = json.load(file)
 
     ControlsPlayer = find_in_json(data, GetKey.GeKeyObjectPlayer, "ControlsPlayer")
 
@@ -147,17 +145,11 @@ class Inventory:
     WidthInventorySlot: int
     HeightInventorySlot: int
 
-    with open("../settings.json", 'r', encoding='utf-8') as file:
-        data = json.load(file)
-
     WidthInventorySlot = find_in_json(data, GetKey.GetKeyInventory, "size_mesh")
 
 
 class ObjectPath:
     Ak: str
-
-    with open("../settings.json", 'r', encoding='utf-8') as file:
-        data = json.load(file)
 
     Ak = find_in_json(data, GetKey.GetKeyObject, "ak")
     M416 = find_in_json(data, GetKey.GetKeyObject, "m416")
@@ -172,3 +164,17 @@ class SettingsLoot:
     InventoryCache = find_in_json(data, GetKey.GeKeyObjectPlayer, "inventory")
     Ak = find_in_json(data, GetKey.SettingsLoot, "ak")
     M416 = find_in_json(data, GetKey.SettingsLoot, "m416")
+
+
+class SettingsWeapon:
+    with_Ak: str
+    height_ak: str
+    ColorBullet: int
+    BulletSpeed: int
+
+    with_height_color_ak = find_in_json(data, GetKey.SettingsWeapon, "ak")
+    with_Ak = with_height_color_ak["with_Ak"]
+    height_ak = with_height_color_ak["heightAk"]
+    ColorBullet = with_height_color_ak["colorBulletAk"]
+    BulletSpeed = with_height_color_ak.get("bullet_speed", 5)
+    FireRate = with_height_color_ak.get("fire_rate", 200)

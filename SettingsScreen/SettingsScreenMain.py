@@ -1,4 +1,6 @@
 import pygame
+
+from NoIdeaGamePygame.Player.PlayerSettings import Player
 from NoIdeaGamePygame.module import SettingsScreenPer
 
 
@@ -16,31 +18,24 @@ class ScreenSetting:
         self._height: int = height
         self.screen = pygame.display.set_mode((self._width, self._height))
         self.screen.fill(SettingsScreenPer.Black)
+        self.mouse_pos = pygame.mouse.get_pos()
 
         self.font = pygame.font.SysFont("cosmeticians", 36)
-        self.text_play = self.font.render("Play", True, (0, 128, 0))
         self.text_settings = self.font.render("Settings", True, (0, 128, 0))
 
-        # self.text_change_skin = self.font.render()
+        self.button_width: int = 300
+        self.button_height: int = 70
+        self.center_x: int = self._width // 2
+        self.center_y: int = self._height // 2
+        self.gap: int = 5
+        self.text_change = self.font.render("Change foreskin", True, (0, 128, 0))
+        self.change_button_y: int = self.center_y + self.gap // 2
+        self.change_text_rect = self.text_change.get_rect(center=(self.button_width // 2, self.button_height // 2))
+        self.change_skin_y: int = 200
+        self.settings_text_rect = self.text_settings.get_rect(center=(self.button_width // 2, self.button_height // 2))
 
-        button_width: int = 200
-        button_height: int = 60
-        gap: int = 5
-
-        center_x: int = self._width // 2
-        center_y: int = self._height // 2
-
-        play_y: int = center_y - button_height - gap // 2
-        self.play_rect = pygame.Rect(center_x - button_width // 2, play_y, button_width, button_height)
-        self.play_surface = pygame.Surface((button_width, button_height))
-
-        settings_y: int = center_y + gap // 2
-        self.settings_rect = pygame.Rect(center_x - button_width // 2, settings_y, button_width, button_height)
-        self.settings_surface = pygame.Surface((button_width, button_height))
-
-        self.play_text_rect = self.text_play.get_rect(center=(button_width // 2, button_height // 2))
-        self.settings_text_rect = self.text_settings.get_rect(center=(button_width // 2, button_height // 2))
-
+        self.change_rect = pygame.Rect(100, self.change_skin_y, self.button_width, self.button_height)
+        self.change_surface = pygame.Surface((self.button_width, self.button_height))
 
         self.event = None
         self.DONE: bool = False
@@ -55,25 +50,31 @@ class ScreenSetting:
         self.screen.blit(surface, rect)
 
     def run_settings_menu(self):
-        print(self.font,  self.screen)
+        print(self.font, self.screen)
+        mouse_pos = pygame.mouse.get_pos()
+        Pl = Player(self.screen)
 
         while not self.DONE:
-            mouse_pos = pygame.mouse.get_pos()
-
             for self.event in pygame.event.get():
                 if self.event.type == pygame.QUIT:
                     self.DONE = True
                 if self.event.type == pygame.MOUSEBUTTONDOWN and self.event.button == 1:
-                    if self.play_rect.collidepoint(self.event.pos):
-                        print("Play button clicked!")
-                    elif self.settings_rect.collidepoint(self.event.pos):
-                        print("Settings button clicked!")
+                    if self.change_rect.collidepoint(self.event.pos):
+                        Player(self.screen).change_skin_player()
+                        pygame.display.flip()
+
+                if self.change_rect.collidepoint(mouse_pos):
+                    pygame.draw.rect(self.change_surface, (127, 255, 212), (1, 1, 148, 48))
 
             self.screen.fill(SettingsScreenPer.Black)
+
+            self.draw_button(self.change_surface, self.change_rect, self.change_text_rect,
+                             self.text_change, self.change_rect.collidepoint(pygame.mouse.get_pos()))
 
             self.screen.blit(self.text_settings,
                              (500 - self.text_settings.get_width() // 2,
                               150 - self.text_settings.get_height()))
 
+            Pl.rect_player_in_start_menu(750, 200)
 
             pygame.display.flip()

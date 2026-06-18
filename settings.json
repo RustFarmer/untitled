@@ -35,7 +35,7 @@
     },
     "Player": {
         "name": "default",
-        "skin_ust": "blue",
+        "skin_ust": "default",
         "health": 100,
         "ColorHealthPoint": [
             255,
@@ -53,8 +53,8 @@
         "level": 1,
         "score": 0,
         "position": [
-            520.5,
-            469.0
+            459.5,
+            640
         ],
         "width_player": 60,
         "height_player": 60,
@@ -76,6 +76,11 @@
         "blue": [
             0,
             128,
+            255
+        ],
+        "white": [
+            255,
+            255,
             255
         ]
     },
@@ -110,6 +115,25 @@
                 150,
                 140
             ]
+        }
+    },
+    "SettingsWeapon": {
+        "ak": {
+            "with_Ak": 10,
+            "heightAk": 2,
+            "colorBulletAk": [
+                247,
+                242,
+                26
+            ],
+            "fire_rate": 50
+        },
+        "m416": {
+            "with_heightM416": [
+                10,
+                2
+            ],
+            "bullet_speed": 5
         }
     }
 }

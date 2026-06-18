@@ -2,11 +2,12 @@ import pygame
 import json
 from NoIdeaGamePygame.module import SettingsScreenPer, ObjectPath, SettingsLoot, find_in_json, GetKey
 
-with open("../settings.json", 'r', encoding='utf-8') as f:
-    data = json.load(f)
+data = "../settings.json"
+
 
 class Inventory:
     def __init__(self):
+        pygame.init()
         self.M416_scale = None
         self.M416 = None
         self.image_M416 = None
@@ -14,7 +15,6 @@ class Inventory:
         self.image_Ak = None
         self.Ak_scale = None
         self.Ak = None
-        pygame.init()
         self._width = SettingsScreenPer.width
         self._height = SettingsScreenPer.height
         self.screen = pygame.display.set_mode((self._width, self._height))
@@ -24,13 +24,13 @@ class Inventory:
         self.size_mesh_inventory_Ak = SettingsLoot.Ak["sizeInInventory"]
         self.size_mesh_inventory_M416 = SettingsLoot.M416["sizeInInventory"]
         self.Invt_Cache = SettingsLoot.InventoryCache
-        # print(self.Invt_Cache)
 
-        self.color = data.get("ColorInventory", {}).get("Gray", [79, 79, 79])
+        self.color = find_in_json(data, "ColorInventory", "Gray")
 
-        size_mesh = data.get("SettingsInventory", {}).get("size_mesh")
+        size_mesh = find_in_json(data, "SettingsInventory", "size_mesh")
+
         if size_mesh is None:
-            size_mesh = data.get("SettingsInventory", {}).get("size_mesh ", [150, 150])
+            size_mesh = find_in_json(data, "SettingsInventory", "size_mesh")
         self.slot_size = size_mesh if size_mesh else [150, 150]
 
     def add_loot(self):
@@ -54,7 +54,6 @@ class Inventory:
                     scaled = pygame.transform.scale(img, self.size_mesh_inventory_Ak)
                     images[name] = scaled
                 except Exception as e:
-                    print(f"Не удалось загрузить {path}: {e}")
                     images[name] = None
             else:
                 images[name] = None
@@ -93,13 +92,11 @@ class Inventory:
                         if surface:
                             self._draw_item_in_slot(surface, slot_rect)
 
-
             pygame.display.update()
 
         self.screen.fill(SettingsScreenPer.Black)
         pygame.display.flip()
 
     def _draw_item_in_slot(self, image, slot_rect):
-        """Центрирует изображение в слоте и рисует."""
         img_rect = image.get_rect(center=slot_rect.center)
         self.screen.blit(image, img_rect)
