@@ -18,7 +18,6 @@ def find_in_json(data_path, GetKey, target_find) -> list or None:
 
 
 def update_json_value(file_path, key_path, new_value, create_missing=False):
-
     with open(file_path, 'r', encoding='utf-8') as f:
         data = json.load(f)
         print(data["Player"]['position'], '-MODULE-0', new_value)
@@ -52,13 +51,23 @@ def update_json_value(file_path, key_path, new_value, create_missing=False):
 
 
 class GetKey:
+    GetKeyFPS: str = "FPS"
     GetKeySettingsScreenColor: str = "Color"
     GetKeyObjectScreenParameter: str = "ParameterScreen"
     GeKeyObjectPlayer: str = "Player"
     GetKeyObject: str = "Path_In_Object_Model"
     GetKeyInventory: str = "SettingsInventory"
-    SettingsLoot: str = "SpecificationsLoot"
-    SettingsWeapon: str = "SettingsWeapon"
+
+    GetSettingsLoot: str = "SpecificationsLoot"
+    GetSettingsWeapon: str = "SettingsWeapon"
+    GetSettingsHotSlotInventory: str = "SettingsHotSlotInventory"
+
+    GetSettingEnemy: str = "SettingEnemy"
+    GetSettingsAmmo: str = "SettingsAmmo"  # Новый ключ
+
+
+class FPS:
+    Fps: int = find_in_json(data, GetKey.GetKeyFPS, "GameFps")
 
 
 class SettingsScreenPer:
@@ -110,7 +119,6 @@ class SettingsPlayer:
     Inventory: list
 
     Name = find_in_json(data, GetKey.GeKeyObjectPlayer, "name")
-
     Skin = find_in_json(data, GetKey.GeKeyObjectPlayer, "skin")
     skin_ust = find_in_json(data, GetKey.GeKeyObjectPlayer, "skin_ust")
 
@@ -126,9 +134,7 @@ class SettingsPlayer:
     Height_player = find_in_json(data, GetKey.GeKeyObjectPlayer, "height_player")
 
     Inventory = find_in_json(data, GetKey.GeKeyObjectPlayer, "inventory")
-
     Position = find_in_json(data, GetKey.GeKeyObjectPlayer, "position")
-
     PositionX, PositionY = Position[0], Position[1]
 
     Speed = find_in_json(data, GetKey.GeKeyObjectPlayer, "speed")
@@ -137,44 +143,122 @@ class SettingsPlayer:
 
 class ControlsPlayer:
     ControlsPlayer: dict
-
     ControlsPlayer = find_in_json(data, GetKey.GeKeyObjectPlayer, "ControlsPlayer")
 
 
 class Inventory:
     WidthInventorySlot: int
     HeightInventorySlot: int
-
     WidthInventorySlot = find_in_json(data, GetKey.GetKeyInventory, "size_mesh")
+
+
+class HotSlotInventory:
+    WidthHorInventorySlot: int
+    HeightHotInventorySlot: int
+    CountSlotHotSlot: int
+    ColorHotSlot: dict
+    PosX: int
+    PosY: int
+    GapHotSlot: int
+
+    WidthHorInventorySlot: int = find_in_json(data, GetKey.GetSettingsHotSlotInventory, "with")
+    HeightHotInventorySlot: int = find_in_json(data, GetKey.GetSettingsHotSlotInventory, "height")
+    CountSlotHotSlot: int = find_in_json(data, GetKey.GetSettingsHotSlotInventory, "count")
+    ColorHotSlot: dict = find_in_json(data, GetKey.GetSettingsHotSlotInventory, "color")
+    PosX: int = find_in_json(data, GetKey.GetSettingsHotSlotInventory, "PositionX")
+    PosY: int = find_in_json(data, GetKey.GetSettingsHotSlotInventory, "PositionY")
+    GapHotSlot = find_in_json(data, GetKey.GetSettingsHotSlotInventory, "GapHotSlot")
 
 
 class ObjectPath:
     Ak: str
-
+    M416: str
+    TimeStopClock: str
     Ak = find_in_json(data, GetKey.GetKeyObject, "ak")
     M416 = find_in_json(data, GetKey.GetKeyObject, "m416")
+    TimeStopClock = find_in_json(data, GetKey.GetKeyObject, "timeStopClock")
 
 
 class SettingsLoot:
     Ak: str
-    TimeSpawn: int = 1
-
+    M416: str
     InventoryCache: str
-
     InventoryCache = find_in_json(data, GetKey.GeKeyObjectPlayer, "inventory")
-    Ak = find_in_json(data, GetKey.SettingsLoot, "ak")
-    M416 = find_in_json(data, GetKey.SettingsLoot, "m416")
+    Ak = find_in_json(data, GetKey.GetSettingsLoot, "ak")
+    M416 = find_in_json(data, GetKey.GetSettingsLoot, "m416")
 
 
 class SettingsWeapon:
-    with_Ak: str
-    height_ak: str
+    with_height_color_ak: dict
+    with_Ak: int
+    height_ak: int
     ColorBullet: int
     BulletSpeed: int
+    FireRate_Ak: int
 
-    with_height_color_ak = find_in_json(data, GetKey.SettingsWeapon, "ak")
+    with_height_color_ak = find_in_json(data, GetKey.GetSettingsWeapon, "ak")
     with_Ak = with_height_color_ak["with_Ak"]
     height_ak = with_height_color_ak["heightAk"]
     ColorBullet = with_height_color_ak["colorBulletAk"]
     BulletSpeed = with_height_color_ak.get("bullet_speed", 5)
-    FireRate = with_height_color_ak.get("fire_rate", 200)
+    FireRate_Ak = with_height_color_ak.get("fire_rate", 200)
+
+    FireRate_M416_ = find_in_json(data, GetKey.GetSettingsWeapon, "m416")
+    FireRate_M416 = FireRate_M416_.get("fire_rate", 200)
+
+
+class SettingsSound:
+    ShootSound_Ak: str
+    ShootSound_m416: str
+    TimeStop_first: str
+    TimeStop_last: str
+    Volume: float
+
+    ShootSound_Ak: str = find_in_json(data, "Sound", "shoot_AK")
+    ShootSound_m416: str = find_in_json(data, "Sound", "shoot_m416")
+    TimeStop_first: str = find_in_json(data, "Sound", "timeStop_first")
+    TimeStop_last: str = find_in_json(data, "Sound", "timeStop_last")
+
+    Volume: float = find_in_json(data, "Sound", "volume") or 1.0
+    TimeStop_first_volume = find_in_json(data, "Sound", "TimeStopVolume")
+
+
+class SettingEnemy:
+    color_enemy: dict
+
+    pigeon: list
+    width_pigeon: int
+    height_pigeon: int
+    damage_pigeon: int
+    speed_pigeon: int
+
+    _width_pigeon: int = find_in_json(data, GetKey.GetSettingEnemy, "EnemyName")
+    _height_pigeon: int = find_in_json(data, GetKey.GetSettingEnemy, "EnemyName")
+    _damage_pigeon: int = find_in_json(data, GetKey.GetSettingEnemy, "EnemyName")
+    _speed_pigeon: int = find_in_json(data, GetKey.GetSettingEnemy, "EnemyName")
+    _color_pigeon: dict = find_in_json(data, GetKey.GetSettingEnemy, "EnemyName")
+    _skin_PATH: dict = find_in_json(data, GetKey.GetSettingEnemy, "EnemyName")
+
+    width_pigeon = _width_pigeon["pigeon"]['width_enemy']
+    height_pigeon = _height_pigeon["pigeon"]['height_enemy']
+    damage_pigeon = _damage_pigeon["pigeon"]['damage_enemy']
+    speed_pigeon = _damage_pigeon["pigeon"]['speed_enemy']
+    skin_PATH = _skin_PATH["pigeon"]["skin_PATH"]
+
+
+class SettingsAmmo:
+    AkMaxAmmo: int = 30
+    AkInitialMagazines: int = 4
+    AkReloadTimeMs: int = 2000
+
+    M416MaxAmmo: int= 30
+    M416InitialMagazines: int = 4
+    M416ReloadTimeMs: int = 2000
+
+    TimeStopCooldown: int = 10000
+
+    _ammo_data = find_in_json(data, GetKey.GetSettingsAmmo, None)
+    if _ammo_data:
+        AkMaxAmmo = _ammo_data.get("ak", {}).get("max_ammo", AkMaxAmmo)
+        AkInitialMagazines = _ammo_data.get("ak", {}).get("initial_magazines", AkInitialMagazines)
+        AkReloadTimeMs = _ammo_data.get("ak", {}).get("reload_time_ms", AkReloadTimeMs)

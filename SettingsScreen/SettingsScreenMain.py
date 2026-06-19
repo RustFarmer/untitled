@@ -53,7 +53,6 @@ class ScreenSetting:
         print(self.font, self.screen)
         mouse_pos = pygame.mouse.get_pos()
         Pl = Player(self.screen)
-
         while not self.DONE:
             for self.event in pygame.event.get():
                 if self.event.type == pygame.QUIT:

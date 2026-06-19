@@ -19,10 +19,6 @@ class GenerationWord:
                                             SettingsScreenPer.FirstSetting_y - 100,
                                             1080, 100))
 
-    # def generation_layer(self):
-        # for x in range(12):
-            # pygame.draw.rect(self.screen, )
-
     def third_layer(self):
         pass
 

@@ -1,4 +1,7 @@
 {
+    "FPS": {
+        "GameFps": 240
+    },
     "Color": {
         "Black": [
             0,
@@ -29,13 +32,28 @@
             150
         ]
     },
+    "SettingsHotSlotInventory": {
+        "with": 123,
+        "height": 122,
+        "count": 4,
+        "color": {
+            "Gray": [
+                79,
+                79,
+                79
+            ]
+        },
+        "PositionX": 40,
+        "PositionY": 30,
+        "GapHotSlot": 5
+    },
     "ParameterScreen": {
         "width": 1080,
         "height": 900
     },
     "Player": {
         "name": "default",
-        "skin_ust": "default",
+        "skin_ust": "blue",
         "health": 100,
         "ColorHealthPoint": [
             255,
@@ -53,18 +71,18 @@
         "level": 1,
         "score": 0,
         "position": [
-            459.5,
+            560,
             640
         ],
         "width_player": 60,
         "height_player": 60,
-        "speed": 0.5,
+        "speed": 5,
         "scale_move": 10,
         "inventory": [
             "m416",
             "ak",
             "m416",
-            "m416"
+            "timeStopClock"
         ]
     },
     "Skin": {
@@ -93,7 +111,8 @@
     },
     "Path_In_Object_Model": {
         "ak": "../object_model/ak_model.png",
-        "m416": "../object_model/m416_model.png"
+        "m416": "../object_model/m416_model.png",
+        "timeStopClock": "../object_model/timeStopClock_model.png"
     },
     "SpecificationsLoot": {
         "ak": {
@@ -126,14 +145,65 @@
                 242,
                 26
             ],
-            "fire_rate": 50
+            "fire_rate": 130
         },
         "m416": {
             "with_heightM416": [
                 10,
                 2
             ],
+            "colorBulletAk": [
+                247,
+                242,
+                26
+            ],
+            "fire_rate": 100,
             "bullet_speed": 5
+        },
+        "timeStopClock": {}
+    },
+    "Sound": {
+        "shoot_AK": "../sound/ak_sound_shut.wav",
+        "shoot_m416": "../sound/m416.wav",
+        "timeStop_first": "../sound/the-sound-of-time-slowing-down.wav",
+        "timeStop_last": "../sound/slow-time-effect-with-squeak.wav",
+        "TimeStopVolume": 0.4,
+        "volume": 0.7
+    },
+    "SettingEnemy": {
+        "ColorEnemy": {
+            "Brown": [
+                80,
+                40,
+                50
+            ]
+        },
+        "EnemyName": {
+            "pigeon": {
+                "width_enemy": 500,
+                "height_enemy": 300,
+                "damage_enemy": 30,
+                "speed_enemy": 8,
+                "skin_PATH": [
+                    "../object_model/pigeon_worth.png",
+                    "../object_model/let_pigeon.png"
+                ]
+            }
+        }
+    },
+    "SettingsAmmo": {
+        "ak": {
+            "max_ammo": 30,
+            "initial_magazines": 4,
+            "reload_time_ms": 2000
+        },
+        "m416": {
+            "max_ammo": 30,
+            "initial_magazines": 4,
+            "reload_time_ms": 2000
+        },
+        "timeStopClock": {
+            "cooldown_ms": 10000
         }
     }
 }

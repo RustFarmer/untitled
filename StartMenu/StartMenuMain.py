@@ -1,5 +1,5 @@
 import pygame
-from NoIdeaGamePygame.module import SettingsScreenPer
+from NoIdeaGamePygame.module import SettingsScreenPer, FPS
 from NoIdeaGamePygame.GameScreen.GameScreenMain import GameScreen
 from NoIdeaGamePygame.SettingsScreen.SettingsScreenMain import ScreenSetting
 from NoIdeaGamePygame.Player.PlayerSettings import Player
@@ -8,6 +8,7 @@ from NoIdeaGamePygame.Player.PlayerSettings import Player
 class StartMenu:
     def __init__(self, width, height):
         pygame.init()
+        self.FPS = FPS.Fps
 
         self._width: int = width
         self._height: int = height
@@ -48,8 +49,9 @@ class StartMenu:
         self.screen.blit(surface, rect)
 
     def run_start_menu(self):
+        clock = pygame.time.Clock()
         while not self.DONE:
-
+            clock.tick(self.FPS)
             Pl = Player(self.screen)
             mouse_pos = pygame.mouse.get_pos()
 
@@ -68,7 +70,6 @@ class StartMenu:
                     elif self.settings_rect.collidepoint(self.event.pos):
                         settingsmenu = ScreenSetting(self._width, self._height)
                         settingsmenu.run_settings_menu()
-                        print("Settings button clicked!")
 
             self.screen.fill(SettingsScreenPer.Black)
 
@@ -79,7 +80,6 @@ class StartMenu:
                              self.text_settings, self.settings_rect.collidepoint(mouse_pos))
 
             Pl.rect_player_in_start_menu(900, 700)
-
             pygame.display.flip()
 
         pygame.quit()
